@@ -185,3 +185,27 @@ rl = rocket_layer(48, -6)
 itch.alpha_composite(rl, (315 - rl.width // 2, 385 - rl.height // 2))
 itch.convert("RGB").save(os.path.join(OUT_DIR, "cover-itch-630x500.png"))
 print("cover-itch-630x500.png")
+
+# ---------- Фото для Telegram-игры 640x360 ----------
+tg = sky(640, 360)
+star(tg, 60, 60, 20, 0.2)
+star(tg, 580, 70, 18, 0.9)
+star(tg, 540, 260, 20, 0.5)
+rock(tg, 90, 250, 32, 0.7)
+rock(tg, 560, 170, 26, 1.4)
+rock(tg, 250, 50, 20, 0.2)
+
+d = ImageDraw.Draw(tg)
+tg_title = ImageFont.truetype(FONT_BOLD, 46)
+tg_sub = ImageFont.truetype(FONT_REG, 18)
+
+glow(tg, 320, 140, 220, (255, 179, 71), 50)
+d = ImageDraw.Draw(tg)
+d.text((320, 128), "Небесный уворот", font=tg_title, fill=(255, 233, 138, 255), anchor="mm")
+d.text((320, 176), "Уклоняйся от метеоритов, собирай звёзды!",
+       font=tg_sub, fill=(255, 255, 255, 220), anchor="mm")
+
+rl = rocket_layer(42, -6)
+tg.alpha_composite(rl, (320 - rl.width // 2, 275 - rl.height // 2))
+tg.convert("RGB").save(os.path.join(OUT_DIR, "telegram-photo-640x360.png"))
+print("telegram-photo-640x360.png")
