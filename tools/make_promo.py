@@ -161,3 +161,27 @@ rl = rocket_layer(52, -6)
 cover.alpha_composite(rl, (400 - rl.width // 2, 350 - rl.height // 2))
 cover.convert("RGB").save(os.path.join(OUT_DIR, "cover-800x470.png"))
 print("cover-800x470.png")
+
+# ---------- Обложка для itch.io 630x500 ----------
+itch = sky(630, 500)
+star(itch, 70, 70, 22, 0.2)
+star(itch, 560, 90, 20, 0.9)
+star(itch, 520, 380, 22, 0.5)
+rock(itch, 100, 350, 36, 0.7)
+rock(itch, 540, 240, 30, 1.4)
+rock(itch, 250, 60, 22, 0.2)
+
+d = ImageDraw.Draw(itch)
+itch_title = ImageFont.truetype(FONT_BOLD, 52)
+itch_sub = ImageFont.truetype(FONT_REG, 20)
+
+glow(itch, 315, 200, 240, (255, 179, 71), 50)
+d = ImageDraw.Draw(itch)
+d.text((315, 185), "Небесный уворот", font=itch_title, fill=(255, 233, 138, 255), anchor="mm")
+d.text((315, 240), "Уклоняйся от метеоритов,", font=itch_sub, fill=(255, 255, 255, 220), anchor="mm")
+d.text((315, 268), "собирай звёзды!", font=itch_sub, fill=(255, 255, 255, 220), anchor="mm")
+
+rl = rocket_layer(48, -6)
+itch.alpha_composite(rl, (315 - rl.width // 2, 385 - rl.height // 2))
+itch.convert("RGB").save(os.path.join(OUT_DIR, "cover-itch-630x500.png"))
+print("cover-itch-630x500.png")
