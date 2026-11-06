@@ -1,0 +1,235 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0b1030;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  color: #fff;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#game-canvas {
+  position: fixed;
+  inset: 0;
+  display: block;
+}
+
+/* ---------- Экраны ---------- */
+
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6, 9, 28, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 20;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 28px 34px;
+  border-radius: 22px;
+  background: linear-gradient(160deg, rgba(30, 40, 90, 0.92), rgba(14, 18, 48, 0.95));
+  border: 1px solid rgba(120, 150, 255, 0.25);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.5);
+  max-width: min(92vw, 420px);
+  text-align: center;
+  animation: pop-in 0.28s ease-out;
+}
+
+@keyframes pop-in {
+  from { transform: scale(0.9); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+/* ---------- Текст ---------- */
+
+.title {
+  font-size: clamp(34px, 8vw, 52px);
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: 1px;
+  background: linear-gradient(180deg, #ffe98a, #ffb347);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 4px 24px rgba(255, 179, 71, 0.25);
+}
+
+.title-small {
+  font-size: clamp(24px, 6vw, 34px);
+  font-weight: 800;
+  color: #ffe98a;
+}
+
+.subtitle {
+  font-size: clamp(14px, 3.5vw, 17px);
+  opacity: 0.85;
+  line-height: 1.4;
+}
+
+.best-line {
+  font-size: 15px;
+  opacity: 0.8;
+}
+
+.final-score {
+  font-size: clamp(44px, 12vw, 64px);
+  font-weight: 800;
+  color: #ffe98a;
+  line-height: 1;
+}
+
+.new-record {
+  color: #7dffa8;
+  font-weight: 700;
+  font-size: 16px;
+  animation: blink 0.9s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+/* ---------- Кнопки ---------- */
+
+.btn {
+  min-width: 200px;
+  padding: 13px 26px;
+  font-size: 17px;
+  font-weight: 700;
+  font-family: inherit;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 0.08s ease, background 0.15s ease;
+}
+
+.btn:hover { background: rgba(255, 255, 255, 0.18); }
+.btn:active { transform: scale(0.95); }
+
+.btn-primary {
+  background: linear-gradient(180deg, #ffb347, #ff8c42);
+  border-color: #ffcf87;
+  color: #3a1c00;
+  box-shadow: 0 6px 22px rgba(255, 140, 66, 0.4);
+}
+
+.btn-primary:hover { background: linear-gradient(180deg, #ffc368, #ff9d57); }
+
+.btn-small {
+  min-width: 0;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.icon-btn {
+  width: 46px;
+  height: 46px;
+  font-size: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(10, 14, 40, 0.6);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.08s ease;
+}
+
+.icon-btn:active { transform: scale(0.9); }
+
+/* ---------- HUD ---------- */
+
+#hud {
+  pointer-events: none;
+  z-index: 15;
+  padding: calc(10px + env(safe-area-inset-top)) calc(12px + env(safe-area-inset-right)) 12px calc(12px + env(safe-area-inset-left));
+}
+
+#hud-score {
+  position: absolute;
+  top: calc(10px + env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(34px, 9vw, 52px);
+  font-weight: 800;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+}
+
+#hud-best {
+  position: absolute;
+  top: calc(14px + env(safe-area-inset-top));
+  left: calc(14px + env(safe-area-inset-left));
+  font-size: 14px;
+  opacity: 0.75;
+}
+
+.hud-buttons {
+  position: absolute;
+  top: calc(10px + env(safe-area-inset-top));
+  right: calc(12px + env(safe-area-inset-right));
+  display: flex;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+/* ---------- Лидерборд ---------- */
+
+.leaderboard {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
+.lb-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.7;
+  margin-bottom: 6px;
+}
+
+#lb-list {
+  list-style: none;
+  text-align: left;
+  font-size: 15px;
+}
+
+#lb-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0;
+  opacity: 0.9;
+}
+
+#lb-list li.lb-me {
+  color: #ffe98a;
+  font-weight: 700;
+  opacity: 1;
+}

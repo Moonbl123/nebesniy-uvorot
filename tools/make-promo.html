@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Промо-материалы — Небесный уворот</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #10142e; color: #fff; padding: 20px; }
+  h2 { margin: 24px 0 8px; }
+  canvas { display: block; border: 1px solid #444; margin-bottom: 8px; }
+  button { padding: 10px 20px; font-size: 15px; cursor: pointer; }
+</style>
+</head>
+<body>
+  <h1>Промо-материалы для «Небесного уворота»</h1>
+  <p>Иконка и обложка рисуются кодом в стиле игры. Нажмите кнопку, чтобы скачать PNG.</p>
+
+  <h2>Иконка 512×512</h2>
+  <canvas id="icon" width="512" height="512"></canvas>
+  <button onclick="download('icon', 'icon-512.png')">Скачать иконку</button>
+
+  <h2>Обложка 800×470</h2>
+  <canvas id="cover" width="800" height="470"></canvas>
+  <button onclick="download('cover', 'cover-800x470.png')">Скачать обложку</button>
+
+<script>
+'use strict';
+
+function drawRocket(ctx, x, y, r, tilt) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(tilt || 0);
+
+  const flame = r * 1.1;
+  const fg = ctx.createLinearGradient(0, r * 0.8, 0, r * 0.8 + flame);
+  fg.addColorStop(0, 'rgba(255, 200, 80, 0.95)');
+  fg.addColorStop(1, 'rgba(255, 100, 40, 0)');
+  ctx.fillStyle = fg;
+  ctx.beginPath();
+  ctx.moveTo(-r * 0.35, r * 0.75);
+  ctx.lineTo(0, r * 0.8 + flame);
+  ctx.lineTo(r * 0.35, r * 0.75);
+  ctx.closePath();
+  ctx.fill();
+
+  const bg = ctx.createLinearGradient(-r, 0, r, 0);
+  bg.addColorStop(0, '#e8ecf5');
+  bg.addColorStop(1, '#aab4cc');
+  ctx.fillStyle = bg;
+  ctx.beginPath();
+  ctx.moveTo(0, -r * 1.25);
+  ctx.quadraticCurveTo(r * 0.9, -r * 0.2, r * 0.62, r * 0.8);
+  ctx.lineTo(-r * 0.62, r * 0.8);
+  ctx.quadraticCurveTo(-r * 0.9, -r * 0.2, 0, -r * 1.25);
+  ctx.fill();
+
+  ctx.fillStyle = '#ff6b5e';
+  ctx.beginPath();
+  ctx.moveTo(0, -r * 1.25);
+  ctx.quadraticCurveTo(r * 0.5, -r * 0.75, r * 0.42, -r * 0.55);
+  ctx.lineTo(-r * 0.42, -r * 0.55);
+  ctx.quadraticCurveTo(-r * 0.5, -r * 0.75, 0, -r * 1.25);
+  ctx.fill();
+
+  ctx.fillStyle = '#3ec6ff';
+  ctx.beginPath();
+  ctx.arc(0, -r * 0.25, r * 0.3, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = '#5a6685';
+  ctx.lineWidth = r * 0.1;
+  ctx.stroke();
+
+  ctx.fillStyle = '#ff6b5e';
+  ctx.beginPath();
+  ctx.moveTo(-r * 0.6, r * 0.35);
+  ctx.lineTo(-r * 1.05, r * 1.0);
+  ctx.lineTo(-r * 0.55, r * 0.85);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(r * 0.6, r * 0.35);
+  ctx.lineTo(r * 1.05, r * 1.0);
+  ctx.lineTo(r * 0.55, r * 0.85);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function drawRock(ctx, x, y, r, rot) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  ctx.fillStyle = '#7d7468';
+  ctx.beginPath();
+  for (let i = 0; i < 8; i++) {
+    const a = (i / 8) * Math.PI * 2;
+    const rr = r * (0.82 + 0.18 * Math.sin(i * 3.7 + rot));
+    i === 0 ? ctx.moveTo(Math.cos(a) * rr, Math.sin(a) * rr) : ctx.lineTo(Math.cos(a) * rr, Math.sin(a) * rr);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = '#5e574d';
+  ctx.beginPath();
+  ctx.arc(-r * 0.3, -r * 0.2, r * 0.22, 0, Math.PI * 2);
+  ctx.arc(r * 0.25, r * 0.3, r * 0.16, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawStar(ctx, x, y, r, rot) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  ctx.shadowColor = '#ffe98a';
+  ctx.shadowBlur = 14;
+  ctx.fillStyle = '#ffe98a';
+  ctx.beginPath();
+  for (let i = 0; i < 10; i++) {
+    const a = (i / 10) * Math.PI * 2 - Math.PI / 2;
+    const rr = i % 2 === 0 ? r : r * 0.45;
+    i === 0 ? ctx.moveTo(Math.cos(a) * rr, Math.sin(a) * rr) : ctx.lineTo(Math.cos(a) * rr, Math.sin(a) * rr);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+function sky(ctx, w, h) {
+  const grad = ctx.createLinearGradient(0, 0, 0, h);
+  grad.addColorStop(0, '#101638');
+  grad.addColorStop(0.6, '#1b2452');
+  grad.addColorStop(1, '#2c2a5e');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = '#ffffff';
+  let seed = 42;
+  const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  for (let i = 0; i < 70; i++) {
+    ctx.globalAlpha = 0.25 + rnd() * 0.5;
+    ctx.beginPath();
+    ctx.arc(rnd() * w, rnd() * h, 0.6 + rnd() * 1.6, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+
+// ---------- Иконка 512×512 ----------
+(function () {
+  const c = document.getElementById('icon');
+  const ctx = c.getContext('2d');
+  sky(ctx, 512, 512);
+
+  drawStar(ctx, 90, 90, 26, 0.3);
+  drawStar(ctx, 420, 120, 20, 0.8);
+  drawRock(ctx, 90, 400, 34, 0.5);
+  drawRock(ctx, 425, 380, 28, 1.2);
+
+  // Свечение за ракетой
+  const glow = ctx.createRadialGradient(256, 280, 10, 256, 280, 190);
+  glow.addColorStop(0, 'rgba(62, 198, 255, 0.30)');
+  glow.addColorStop(1, 'rgba(62, 198, 255, 0)');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, 512, 512);
+
+  drawRocket(ctx, 256, 280, 70, -0.15);
+
+  // Рамка со скруглением, как у иконок приложений
+  ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(1, 1, 510, 510);
+})();
+
+// ---------- Обложка 800×470 ----------
+(function () {
+  const c = document.getElementById('cover');
+  const ctx = c.getContext('2d');
+  sky(ctx, 800, 470);
+
+  drawStar(ctx, 90, 80, 24, 0.2);
+  drawStar(ctx, 700, 60, 20, 0.9);
+  drawStar(ctx, 620, 330, 22, 0.5);
+  drawRock(ctx, 120, 300, 38, 0.7);
+  drawRock(ctx, 690, 200, 30, 1.4);
+  drawRock(ctx, 330, 60, 24, 0.2);
+
+  // Заголовок
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#ffe98a';
+  ctx.font = '800 64px "Segoe UI", Arial, sans-serif';
+  ctx.shadowColor = 'rgba(255, 179, 71, 0.6)';
+  ctx.shadowBlur = 24;
+  ctx.fillText('Небесный уворот', 400, 190);
+  ctx.shadowBlur = 0;
+
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  ctx.font = '24px "Segoe UI", Arial, sans-serif';
+  ctx.fillText('Уклоняйся от метеоритов, собирай звёзды!', 400, 235);
+
+  drawRocket(ctx, 400, 350, 52, -0.1);
+})();
+
+function download(canvasId, filename) {
+  const a = document.createElement('a');
+  a.download = filename;
+  a.href = document.getElementById(canvasId).toDataURL('image/png');
+  a.click();
+}
+</script>
+</body>
+</html>

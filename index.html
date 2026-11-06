@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Небесный уворот</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <canvas id="game-canvas"></canvas>
+
+  <!-- HUD -->
+  <div id="hud" class="screen hidden">
+    <div id="hud-score">0</div>
+    <div id="hud-best">Рекорд: 0</div>
+    <div class="hud-buttons">
+      <button id="btn-mute" class="icon-btn" aria-label="Звук">🔊</button>
+      <button id="btn-pause" class="icon-btn" aria-label="Пауза">⏸</button>
+    </div>
+  </div>
+
+  <!-- Главное меню -->
+  <div id="menu" class="screen overlay">
+    <div class="panel">
+      <h1 class="title">Небесный<br>уворот</h1>
+      <p class="subtitle">Уклоняйся от метеоритов,<br>собирай звёзды!</p>
+      <button id="btn-play" class="btn btn-primary">Играть</button>
+      <div id="menu-best" class="best-line">Рекорд: 0</div>
+      <button id="btn-menu-mute" class="btn btn-small">🔊 Звук: вкл</button>
+    </div>
+  </div>
+
+  <!-- Пауза -->
+  <div id="pause" class="screen overlay hidden">
+    <div class="panel">
+      <h2 class="title-small">Пауза</h2>
+      <button id="btn-resume" class="btn btn-primary">Продолжить</button>
+      <button id="btn-restart-pause" class="btn">Заново</button>
+      <button id="btn-menu-pause" class="btn">В меню</button>
+    </div>
+  </div>
+
+  <!-- Проигрыш -->
+  <div id="gameover" class="screen overlay hidden">
+    <div class="panel">
+      <h2 class="title-small">Игра окончена</h2>
+      <div id="final-score" class="final-score">0</div>
+      <div id="final-best" class="best-line">Рекорд: 0</div>
+      <div id="new-record" class="new-record hidden">Новый рекорд! 🎉</div>
+      <div id="leaderboard" class="leaderboard hidden">
+        <div class="lb-title">Лучшие пилоты</div>
+        <ol id="lb-list"></ol>
+      </div>
+      <button id="btn-again" class="btn btn-primary">Ещё раз</button>
+      <button id="btn-menu-over" class="btn">В меню</button>
+    </div>
+  </div>
+
+  <script src="/sdk.js" onload="window.__sdkLoaded && window.__sdkLoaded()" onerror="window.__sdkFailed && window.__sdkFailed()"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/ysdk.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>
